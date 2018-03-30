@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     let drone = Aircraft()
     var myAudioPlayer = AVAudioPlayer()
     let kMovingLengthPerLoop: CGFloat = 0.5
-    let kRotationRadianPerLoop: CGFloat = 1.5
+    let kRotationRadianPerLoop: CGFloat = 5.5
     let kAnimationDurationMoving: CGFloat = 10
     var sound = false
     
@@ -26,13 +26,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var leftImageView: UIImageView!
     @IBOutlet weak var rightImageView: UIImageView!
     
-    
     @IBOutlet weak var forwardImageView: UIImageView!
     @IBOutlet weak var backwardImageView: UIImageView!
     @IBOutlet weak var rotateLeftImageView: UIImageView!
     @IBOutlet weak var rotateRightImageView: UIImageView!
-    
-    
     
     
     @IBAction func soundButtonPressed(_ sender: UIButton) {
@@ -41,7 +38,6 @@ class ViewController: UIViewController {
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
-            
             
             myAudioPlayer = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
             
@@ -63,9 +59,8 @@ class ViewController: UIViewController {
         
     }
     
+    
     @IBAction func upLongPressed(_ sender: UILongPressGestureRecognizer) {
-        
-        print("hi")
         
         let action = SCNAction.moveBy(x: 0, y: kMovingLengthPerLoop, z: 0, duration: TimeInterval(kAnimationDurationMoving))
         execute(action: action, sender: sender)
@@ -90,7 +85,6 @@ class ViewController: UIViewController {
     }
     
     
-    
     @IBAction func rightLongPressed(_ sender: UILongPressGestureRecognizer) {
         
         let x = deltas().cos
@@ -100,12 +94,9 @@ class ViewController: UIViewController {
     }
     
     
-    
     @IBAction func rotateLeftLongPressed(_ sender: UILongPressGestureRecognizer) {
         
         rotateDrone(yRadian: kRotationRadianPerLoop, sender: sender)
-        
-        
         
     }
     
@@ -139,18 +130,19 @@ class ViewController: UIViewController {
         return (sin: kMovingLengthPerLoop * CGFloat(sin(drone.eulerAngles.y)), cos: kMovingLengthPerLoop * CGFloat(cos(drone.eulerAngles.y)))
     }
     
+    
     private func moveDrone(x: CGFloat, z: CGFloat, sender: UILongPressGestureRecognizer) {
         let action = SCNAction.moveBy(x: x, y: 0, z: z, duration: TimeInterval(kAnimationDurationMoving))
         execute(action: action, sender: sender)
     }
     
+    
     private func rotateDrone(yRadian: CGFloat, sender: UILongPressGestureRecognizer) {
-        
-        
         
         let action = SCNAction.rotateBy(x: 0, y: yRadian, z: 0, duration: TimeInterval(kAnimationDurationMoving))
         execute(action: action, sender: sender)
     }
+    
     
     private func execute(action: SCNAction, sender: UILongPressGestureRecognizer) {
         let loopAction = SCNAction.repeatForever(action)
@@ -160,6 +152,7 @@ class ViewController: UIViewController {
             drone.removeAllActions()
         }
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -176,11 +169,7 @@ class ViewController: UIViewController {
         
         setupScene()
         addDrone()
-//        func setupScene() {
-//            print("Hello")
-//            let scene = SCNScene()
-//            sceneView.scene = scene
-//        }
+
         // Do any additional setup after loading the view, typically from a nib.
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -203,7 +192,6 @@ class ViewController: UIViewController {
     }
     func addDrone() {
         print("Trying to add drone")
-        //let drone = Aircraft()
         drone.loadModel()
         sceneView.scene.rootNode.addChildNode(drone)
     }
